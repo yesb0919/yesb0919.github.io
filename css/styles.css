@@ -26,12 +26,12 @@ section .contentBx
     z-index: 1000;
 }
 section .contentBx h2{
-    font-size: 80px;
+    font-size: 60px;
     color: #fff;
     text-transform: uppercase;
 }
 section .contentBx p{
-    font-size: 18px;
+    font-size: 20px;
     color: #fff;
 }
 section .contentBx .countdown
