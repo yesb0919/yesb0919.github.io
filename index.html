@@ -7,15 +7,12 @@
     </head>
 
     <body>
-        <header>
-        <a href="#" class="logo">Brand Name</a>
-        </header>
         <section>
             <img src="curve.png" class="wave">
             <div class="contentBx">
                 <h2>Coming Soon</h2>
-                <p>I've fallen in love many times...</p>
-                <p>always with you ♥</p>
+                <p>I've fallen in love many times . . .</p>
+                <p>Always with You ♥</p>
                 <div class="countdown">
                     <div class="time"><div id ="day"></div><span>Days</span></div>
                     <div class="time"><div id ="hour"></div><span>hours</span></div>
@@ -25,12 +22,14 @@
             </div>
 
             <div class="imgBx">
-                <img src="test.png">
+                <img src=test2.png id="img">
             </div>
+        
         </section>
         <script type="text/javascript">
         
-        var countDate = new Date ('Jan 1, 2021 00:00:00').getTime();
+        var countDate = new Date ('Jul 10, 2020 18:00:00').getTime();
+        var count = 0;
 
         function newYear(){
             var now = new Date().getTime();
@@ -45,13 +44,23 @@
             document.getElementById('hour').innerText = hours;
             document.getElementById('minute').innerText = minutes;
             document.getElementById('second').innerText = seconds;
-
+            
+            count ++;
+            if(count == 1000){
+                document.getElementById('img').src = "test1.png";
+            }
+            if(count == 2000){
+                document.getElementById('img').src = "test.png";
+            }
+            if(count == 3000) {
+                document.getElementById('img').src = "test2.png";
+                count = 0;
+            }
+            
         }
-
         setInterval(function(){
             newYear();
         }, 500)
-    
         </script>
     </body>
 </html>

@@ -9,7 +9,7 @@
 }
 
 body{
-    background: #312747;
+    background: #312747
 }
 section{
     position: relative;
@@ -69,6 +69,7 @@ section .imgBx img
     margin-top:  100px;
     z-index: 2;
 }
+
 .wave
 {
     position: absolute;
