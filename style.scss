@@ -1,0 +1,544 @@
+// Colors
+$white: #ffffff;
+$blue: #49befe;
+$blueDarker: #39a4f0;
+$yellow: #ffec00;
+$yellowDark: #ffce00;
+$yellowDarker: #f9b415;
+$orange: #f17b00;
+$orangeDark: #dd6900;
+
+// Global
+$background: $blue;
+
+// Bird
+$bird: $yellow;
+$birdSpot: $yellowDarker;
+$birdBeak: $orange;
+$birdWing: $yellowDark;
+$birdLegLeft: $orangeDark;
+$birdLegRight: $orange;
+$birdBodyGradientRight: $yellowDarker;
+$birdBodyGradientLeft: $yellowDark;
+
+// Levels
+$level-1: 10;
+$level-2: 20;
+$level-3: 30;
+$level-4: 40;
+
+// Animations Variables
+$animationDuration: 0.6s;
+$animationCubic: cubic-bezier(0.39, 0.58, 0.57, 1);
+$animationEase: ease-out;
+$animationSkyDuration: 0.1s;
+
+// Reflection dots variables
+$headReflectionDotSize: 2100%;
+$headReflectionDotCount: 20;
+$headReflectionDotAngle: (35 / $headReflectionDotCount);
+$headReflectionDotRotate: 0;
+
+// Square
+@mixin square($size) {
+	width: $size;
+	height: $size;
+}
+// Reset
+%reset {
+	margin: 0;
+	padding: 0;
+}
+
+// Reset
+html,
+body {
+	@include square(100%);
+	@extend %reset;
+}
+body {
+	background-color: $background;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	overflow: hidden;
+
+	p {
+		position: absolute;
+		bottom: 10%;
+		font-size: 0.7rem;
+		color: $white;
+		opacity: 0.8;
+		font-family: "Quicksand", sans-serif;
+		text-align: center;
+		padding: 0 1rem;
+
+		a {
+			color: currentcolor;
+		}
+	}
+}
+
+// Scene Container
+.scene {
+	@include square(100vmin);
+	position: relative;
+
+	// All Elements
+	div {
+		position: absolute;
+	}
+	svg {
+		display: none;
+	}
+
+	// All Pseudo Elements
+	*:before,
+	*:after {
+		position: absolute;
+		display: block;
+		content: "";
+	}
+
+	// Sky Container
+	.sky {
+		overflow: hidden;
+		top: 18%;
+		height: 30%;
+		width: 100%;
+
+		// Fade Out
+		&:before,
+		&:after {
+			width: 12%;
+			height: 100%;
+			z-index: $level-4;
+		}
+
+		// Fade Out - Left
+		&:before {
+			left: 0;
+			background-image: linear-gradient(
+				to right,
+				$blue 40%,
+				rgba(255, 255, 255, 0)
+			);
+		}
+
+		// Fade Out - Right
+		&:after {
+			right: 0;
+			background-image: linear-gradient(
+				to left,
+				$blue 40%,
+				rgba(255, 255, 255, 0)
+			);
+		}
+	}
+
+	// Bird Container
+	.bird {
+		width: 40%;
+		height: 45%;
+		top: 51%;
+		right: 50%;
+		transform: translate(50%, -50%) translateY(0) rotate(0deg);
+		will-change: transform;
+		transform-origin: center center;
+		animation: fly $animationDuration infinite $animationCubic;
+		@keyframes fly {
+			50% {
+				transform: translate(50%, -50%) translateY(4.5%) rotate(0.3deg);
+			}
+		}
+	}
+}
+
+// Sky and Clouds
+.sky {
+	// Cloud Group
+	&__cloud-group {
+		@include square(100%);
+		top: 0;
+		left: 0;
+		transform: translate(0, 0);
+		will-change: transform;
+		animation: clouds-group $animationSkyDuration * 50 linear infinite;
+		@keyframes clouds-group {
+			to {
+				transform: translate(-100%, 0);
+			}
+		}
+
+		// Second Cloud Group
+		&:last-child {
+			transform: translate(100%, 0);
+			animation: clouds-second-group $animationSkyDuration * 50 linear infinite;
+			@keyframes clouds-second-group {
+				to {
+					transform: translate(0, 0);
+				}
+			}
+		}
+	}
+
+	// Cloud
+	&__cloud {
+		@include square(15%);
+		background: $white;
+		right: 0;
+		top: 15%;
+		transform: translate(50%, 0);
+		border-radius: 100vw 100vw 40vw 40vw;
+
+		// Positioning
+		&:nth-child(1) {
+			right: 10%;
+		}
+		&:nth-child(2) {
+			right: 50%;
+		}
+		&:nth-child(3) {
+			right: 90%;
+			transform: translate(50%, 10%) scale(0.9) scaleX(-1);
+			filter: FlipH;
+		}
+
+		// Cloud Bubbles
+		&--bubbles {
+			// Small Bubble
+			width: 40%;
+			height: 150%;
+			top: -50%;
+			right: -4%;
+			background: $white;
+			border-radius: 100vw;
+			transform: translate(-50%, 0);
+
+			// Big Bubble
+			&:before {
+				background: $white;
+				width: 130%;
+				height: 120%;
+				top: 38%;
+				right: -21%;
+				border-radius: 100vw;
+				transform: translate(-50%, -50%);
+			}
+		}
+
+		// Small Cloud
+		&--small {
+			top: 45%;
+
+			&:nth-child(4) {
+				right: 30%;
+				transform: translate(50%, 40%) scale(0.7) scaleX(-1);
+				filter: FlipH;
+			}
+			&:nth-child(5) {
+				right: 70%;
+				transform: translate(50%, 50%) scale(0.6);
+			}
+		}
+	}
+}
+
+// Bird
+.bird {
+	// Head
+	&__head {
+		width: 56%;
+		height: 50%;
+		right: 10%;
+		top: 11%;
+		z-index: $level-4;
+
+		// Head Shape
+		&:after {
+			width: 100.5%;
+			height: 100%;
+			right: 0;
+			top: -1%;
+			border-radius: 100% 100% 60% 0;
+			background: $bird;
+			z-index: $level-2;
+		}
+
+		// Hairs
+		&--hairs {
+			width: 30%;
+			height: 20%;
+			left: 44%;
+			top: -7%;
+			display: block;
+			z-index: $level-4;
+			transform: translate(-50%, -50%);
+			border-radius: 10% 10% 0 0;
+			overflow: hidden;
+
+			// Hairs Shape
+			&:before,
+			&:after {
+				width: 26%;
+				height: 100%;
+				background: $bird;
+				top: 0;
+				right: 0;
+				transform: translate(-70%, 7%) rotate(5deg);
+				border-radius: 100vw 100vw 0 0;
+			}
+			// Second Hair
+			&:after {
+				transform: translate(-185%, 0%) rotate(-32deg);
+			}
+		}
+
+		// Reflection
+		&--reflection {
+			top: -9%;
+			left: 32%;
+			transform: rotate(-152deg);
+			width: 50%;
+			height: 66%;
+			z-index: $level-4;
+
+			// Reflection dots loop
+			&--dot {
+				@include square(8.5%);
+				background: $white;
+				top: 6%;
+				left: 27%;
+				border-radius: 50%;
+				z-index: $level-4;
+				transform: translate(50%, 50%);
+				@for $i from 1 through $headReflectionDotCount {
+					&:nth-of-type(#{$i}) {
+						transform: rotate($headReflectionDotRotate * 1deg)
+							translate($headReflectionDotSize / 2)
+							rotate($i * $headReflectionDotAngle + deg)
+							rotate($headReflectionDotRotate * -1deg);
+
+						@if $i > 10 and $i < 18 {
+							opacity: 0;
+						}
+					}
+					$headReflectionDotRotate: $headReflectionDotRotate +
+						$headReflectionDotAngle;
+				}
+			}
+		}
+
+		// Eye
+		&--eye {
+			@include square(15%);
+			right: 12%;
+			background: black;
+			z-index: $level-4;
+			border-radius: 100vw;
+			transform: translate(-50%, 50%);
+			transform-origin: center center;
+			top: 31%;
+			will-change: top, width, height;
+			animation: blink 10s forwards infinite;
+			@keyframes blink {
+				0%,
+				4%,
+				15%,
+				20%,
+				30%,
+				34%,
+				39%,
+				43%,
+				60%,
+				64%,
+				100% {
+					top: 31%;
+					width: 15%;
+					height: 15%;
+				}
+				2%,
+				18%,
+				32%,
+				41%,
+				62% {
+					height: 1%;
+					top: 44.5%;
+				}
+			}
+		}
+
+		&--spot {
+			@include square(14%);
+			right: 38%;
+			bottom: 35%;
+			background: $birdSpot;
+			z-index: $level-4;
+			border-radius: 50%;
+		}
+
+		// Beak Mask
+		&--beak {
+			@include square(40%);
+			top: 0;
+			right: 0;
+			transform: translate(32%, 82%) rotate(60deg);
+			border-radius: 17%;
+			overflow: hidden;
+			z-index: $level-1;
+
+			// Beak Shape
+			&:before {
+				width: 68%;
+				height: 110%;
+				background: $birdBeak;
+				top: 0;
+				right: 0;
+				border-radius: 1% 0 0 0;
+				transform: translate(-9%, -2%) rotate(60deg);
+				z-index: $level-1;
+			}
+		}
+	}
+
+	// Body
+	&__body {
+		width: 80.7%;
+		height: 40%;
+		right: 10%;
+		top: 40.7%;
+		overflow: hidden;
+		border-radius: 5% 0 0 0;
+		z-index: $level-3;
+
+		// Body Shape - Part 1
+		&:before {
+			width: 100%;
+			height: 190%;
+			right: 0;
+			top: -90%;
+			border-radius: 7% 0 100% 100%;
+			background-image: linear-gradient(
+				-45deg,
+				$birdBodyGradientRight 30%,
+				$birdBodyGradientLeft 60%
+			);
+		}
+
+		// Body Shape - Part 2
+		&:after {
+			background: $bird;
+			top: -67%;
+			width: 100%;
+			height: 150%;
+			border-radius: 0 100% 100% 100%;
+		}
+	}
+
+	// Wing mask
+	&__wing {
+		width: 35%;
+		height: 20%;
+		left: 31%;
+		top: 45%;
+		display: block;
+		z-index: $level-4;
+		transform: translate(-50%, -50%) rotate(-8deg);
+		border-radius: 10% 10% 0 0;
+		transform-origin: top right;
+		overflow: hidden;
+		will-change: transform;
+		animation: wing $animationDuration infinite $animationCubic;
+		@keyframes wing {
+			50% {
+				transform: translate(-50%, -50%) rotate(15deg);
+			}
+		}
+
+		// Wing Shape
+		&:before {
+			width: 100%;
+			height: 190%;
+			right: 0;
+			top: -90%;
+			border-radius: 7% 0 100% 100%;
+			background: $birdWing;
+			content: "";
+			display: block;
+		}
+	}
+
+	// Legs
+	&__leg {
+		width: 7.5%;
+		height: 50%;
+		overflow: visible;
+		z-index: $level-2;
+
+		// Legs Container
+		&s {
+			width: 100%;
+			height: 40%;
+			bottom: 0;
+			right: 0;
+			left: 0;
+		}
+
+		// Fingers
+		&:before,
+		&:after {
+			width: 230%;
+			height: 32%;
+			bottom: 0;
+			right: 0;
+			border-radius: 100vw;
+			transform: translateX(30%);
+		}
+		&:after {
+			left: -45%;
+		}
+
+		// Leg - Left
+		&--left {
+			left: 50%;
+			background: $birdLegLeft;
+			transform-origin: top center;
+			top: 50%;
+			transform: translate(-198%, -68%) rotate(40deg);
+			animation: legs-left $animationDuration infinite $animationEase;
+			@keyframes legs-left {
+				50% {
+					transform: translate(-198%, -68%) rotate(37deg);
+				}
+			}
+
+			// Set Left finger color
+			&:before,
+			&:after {
+				background: $birdLegLeft;
+			}
+		}
+		// Leg - Right
+		&--right {
+			top: 50%;
+			right: 50%;
+			background: $birdLegRight;
+			transform: translate(-108%, -70%) rotate(40deg);
+			transform-origin: top center;
+			will-change: transform;
+			animation: legs-right $animationDuration infinite $animationEase;
+			@keyframes legs-right {
+				50% {
+					transform: translate(-108%, -70%) rotate(36deg);
+				}
+			}
+
+			// Set Right finger color
+			&:before,
+			&:after {
+				background: $birdLegRight;
+			}
+		}
+	}
+}
